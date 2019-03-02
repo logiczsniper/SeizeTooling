@@ -1,12 +1,15 @@
 from sys import argv
-
-args = [arg for arg in argv if arg != argv[0]]
-
-print(args)
+from src.argument_handler import ArgumentHandler
 
 
 def main():
-    pass
+    # Set up arguments handler
+    argument_handler = ArgumentHandler(sys_argv=argv)
+
+    # Temp tests
+    print("Args: " + str(argument_handler.args))
+    print("Path: " + str(argument_handler.seize_script_path))
+    print("Command: " + str(argument_handler.command))
 
 
 if __name__ == "__main__":
