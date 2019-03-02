@@ -23,7 +23,7 @@ class This(Command):
         super().__init__("title")
 
     def run(self):
-        pass
+        print("THIS COMMAND")
 
 
 class Transfer(Command):

@@ -1,4 +1,4 @@
-class Commands:
+class CommandStrings:
     THIS = "this"
     TRANSFER = "transfer"
     SHIFT = "shift"
