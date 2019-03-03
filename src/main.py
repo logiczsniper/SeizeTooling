@@ -1,6 +1,5 @@
 from sys import argv
 from src.argument_handler import ArgumentHandler
-from src.constants import CommandStrings
 from src.commands import *
 
 
@@ -17,10 +16,10 @@ def seize():
         command = This()
     elif argument_handler.command == CommandStrings.TRANSFER:
         command = Transfer()
+    elif argument_handler.command == CommandStrings.HELP:
+        command = Help()
     else:
         command = Shift()
-
-    print(argument_handler.flags)
 
     # Run command
     command.run()
