@@ -1,25 +1,15 @@
 from sys import argv
-from src.argument_handler import ArgumentHandler
-from src.commands import *
+
+from src.command_handler import CommandHandler
 
 
 def seize():
-    # Set up arguments handler
-    argument_handler = ArgumentHandler(sys_argv=argv)
+    # Set up command handler
+    command_handler = CommandHandler(sys_argv=argv)
 
-    # Check if the args are valid - if not, return out of function.
-    if not argument_handler.isValid:
+    # Check if the entire command is valid - if not, return out of function.
+    if not command_handler.isValid:
         return None
 
-    # Create command
-    if argument_handler.command == CommandStrings.THIS:
-        command = This()
-    elif argument_handler.command == CommandStrings.TRANSFER:
-        command = Transfer()
-    elif argument_handler.command == CommandStrings.HELP:
-        command = Help()
-    else:
-        command = Shift()
-
-    # Run command
-    command.run()
+    # Run command with the valid flags
+    command_handler.command.run(command_handler.all_flags)

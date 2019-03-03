@@ -4,12 +4,14 @@ from src.constants import CommandStrings
 
 class Command(ABC):
 
-    def __init__(self, name, help_string):
+    def __init__(self, name, help_string, available_flags, passed_flags=None):
         self.name = name
         self.help = help_string
+        self.passed_flags = passed_flags if passed_flags is not None else list()
+        self.available_flags = available_flags
 
     @abstractmethod
-    def run(self):
+    def run(self, flags):
         pass
 
     def __str__(self):
@@ -49,39 +51,49 @@ Flags-----------------------¬
 4. Create git commit -> --g
     The changes made will automatically be added to a git commit. Obviously this means the 
     parent directory must be a remote git repository or this will raise an error.
+    
+5. Verbose -> --v
+    The output is expressed with the statistics from the seize function.
 
-5. Help -> --h
+6. Help -> --h
     View this text.
-                         """)
+                         """, ["--a", "--r", "--s", "--g", "--v", "--h"])
 
-    def run(self):
-        print("THIS COMMAND")
+    def check_directory_validity(self, input_directory):
+        # TODO make sure the provided directory exists
+        pass
+
+    def run(self, flags):
+
+        self.passed_flags = flags
 
 
 class Transfer(Command):
 
     def __init__(self):
-        super().__init__(CommandStrings.TRANSFER, "Transfer help")
+        super().__init__(CommandStrings.TRANSFER, "Transfer help", ["--g", "--v", "--h"])
 
-    def run(self):
+    def run(self, flags):
         print("TRANSFER COMMAND")
 
 
 class Shift(Command):
 
     def __init__(self):
-        super().__init__(CommandStrings.SHIFT, "Shift help")
+        super().__init__(CommandStrings.SHIFT, "Shift help", ["--a", "--r", "--s", "--g", "--v", "--h"])
 
-    def run(self):
+    def run(self, flags):
         print("SHIFT COMMAND")
 
 
 class Help(Command):
 
     def __init__(self):
-        super().__init__(CommandStrings.SHIFT, "Help")
+        super().__init__(CommandStrings.SHIFT, "Help", [])
 
-    def run(self):
+    def run(self, flags):
+        self.passed_flags = flags
+
         print("""
 Usage-----------------------¬
 
