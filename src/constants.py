@@ -3,6 +3,7 @@ class CommandStrings:
     TRANSFER = "transfer"
     SHIFT = "shift"
     HELP = "help"
+    TITLE = ""
 
 
 class Aesthetics:

@@ -8,7 +8,7 @@ def seize():
     command_handler = CommandHandler(sys_argv=argv)
 
     # Check if the entire command is valid - if not, return out of function.
-    if not command_handler.isValid:
+    if not command_handler.is_valid:
         return None
 
     # Run command with the valid flags
