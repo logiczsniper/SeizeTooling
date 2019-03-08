@@ -9,6 +9,9 @@ class CommandHandler:
         # Save all input
         self.all_input = sys_argv
 
+        # TODO this is temporary for test building- get rid of it
+        # print(self.all_input)
+
         # Test if blank command
         if len(self.all_input) == 1:
             # append a blank to all input so it does not raise an error- this is a valid command!
@@ -28,7 +31,7 @@ class CommandHandler:
 
         # Assert whether or not the command is valid
         self.is_valid = True
-        if not self.check_command() or not self.check_parameters() or not self.check_flags():
+        if not self.check_command() or not self.check_parameters() or not self.check_flags() or not self.check_order():
             self.is_valid = False
 
     @staticmethod
@@ -60,6 +63,15 @@ class CommandHandler:
         if self.is_valid:
             return self.all_input[2::]
 
+    def check_command(self):
+
+        # If a command was given but it is not one of the available commands, take action.
+        if isinstance(self.command, Null):
+            print("Command was not valid. Use 'seize help' for assistance.")
+            return False
+
+        return True
+
     def check_parameters(self):
 
         # Parameters are only required if there is no --h flag
@@ -76,15 +88,6 @@ class CommandHandler:
 
         return True
 
-    def check_command(self):
-
-        # If a command was given but it is not one of the available commands, take action.
-        if isinstance(self.command, Null):
-            print("Command was not valid. Use 'seize help' for assistance.")
-            return False
-
-        return True
-
     def check_flags(self):
 
         # If invalid flags were present in the input, take action.
@@ -96,5 +99,21 @@ class CommandHandler:
         elif "--h" in self.all_flags:
             print(self.command.help)
             return False
+
+        return True
+
+    def check_order(self):
+
+        # Assuming the command comes first, check that what follows is the parameter(s) then the flag(s).
+        flag_found = False
+        for arg in self.all_input:
+            if self.all_input.index(arg) in [0, 1]:
+                continue
+
+            if arg in self.all_flags:
+                flag_found = True
+
+            if flag_found and arg not in self.all_flags:
+                return False
 
         return True

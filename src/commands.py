@@ -69,6 +69,7 @@ Flags-----------------------¬
 
     def run(self, flags):
         self.passed_flags = flags
+        print("This command")
 
 
 class Transfer(Command):
@@ -115,7 +116,8 @@ class Shift(Command):
 class Help(Command):
 
     def __init__(self):
-        super().__init__(CommandStrings.SHIFT, "Help", list(), str(), 0)
+        super().__init__(CommandStrings.SHIFT, "Help", list(),
+                         "This command requires zero arguments. Use 'seize help' for assistance.", 0)
 
     def run(self, flags):
         self.passed_flags = flags
