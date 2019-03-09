@@ -15,3 +15,8 @@ class Aesthetics:
 ┃┗━┛┃ ┃┗━━┓ ┏┫┣┓ ┏┛━┗━┓ ┃┗━━┓
 ┗━━━┛ ┗━━━┛ ┗━━┛ ┗━━━━┛ ┗━━━┛           
                 """
+
+
+class Messages:
+
+    HELP = "Use 'seize help' for assistance."

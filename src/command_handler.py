@@ -1,5 +1,6 @@
 from src.commands import This, Shift, Transfer, Help, Title, Null
-from src.constants import CommandStrings
+from src.constants import CommandStrings, Messages
+from os import path
 
 
 class CommandHandler:
@@ -8,9 +9,6 @@ class CommandHandler:
 
         # Save all input
         self.all_input = sys_argv
-
-        # TODO this is temporary for test building- get rid of it
-        # print(self.all_input)
 
         # Test if blank command
         if len(self.all_input) == 1:
@@ -67,7 +65,7 @@ class CommandHandler:
 
         # If a command was given but it is not one of the available commands, take action.
         if isinstance(self.command, Null):
-            print("Command was not valid. Use 'seize help' for assistance.")
+            print("Command was not valid. " + Messages.HELP)
             return False
 
         return True
@@ -79,12 +77,24 @@ class CommandHandler:
 
             # If no parameters are provided and the command is not 'help' or 'title' or 'null', take action.
             if self.all_input[2::] == list() and not isinstance(self.command, (Help, Title, Null)):
-                print("No parameters provided. Use 'seize help' for assistance.")
+                print("No parameters provided. " + Messages.HELP)
                 return False
 
+            # If the wrong number of parameters are provided, take action.
             elif self.command.parameter_count != len(self.parameters):
                 print(self.command.parameter_error_msg)
                 return False
+
+            # Check that the parameters are valid directory or file paths
+            else:
+                for index, path_type in enumerate(self.command.parameter_types):
+                    if path_type == "file" and not path.isfile(self.parameters[index]):
+                        print(f"Invalid parameter: {self.parameters[index]}. Must be a file path. " + Messages.HELP)
+                        return False
+                    elif path_type == "dir" and not path.isdir(self.parameters[index]):
+                        print(
+                            f"Invalid parameter: {self.parameters[index]}. Must be a directory path. " + Messages.HELP)
+                        return False
 
         return True
 
@@ -92,7 +102,7 @@ class CommandHandler:
 
         # If invalid flags were present in the input, take action.
         if self.invalid_flags != list():
-            print(f"Invalid flag(s): {self.invalid_flags}. Use 'seize help' for assistance.")
+            print(f"Invalid flag(s): {self.invalid_flags}. " + Messages.HELP)
             return False
 
         # If help was requested, return false and print the relevant command's help message.
@@ -114,6 +124,7 @@ class CommandHandler:
                 flag_found = True
 
             if flag_found and arg not in self.all_flags:
+                print("Invalid order in command. " + Messages.HELP)
                 return False
 
         return True

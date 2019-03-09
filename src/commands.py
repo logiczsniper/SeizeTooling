@@ -1,17 +1,20 @@
 from abc import abstractmethod, ABC
-from src.constants import CommandStrings, Aesthetics
+from src.constants import CommandStrings, Aesthetics, Messages
 
 
 class Command(ABC):
 
-    def __init__(self, name, help_string, available_flags, parameter_error_msg, parameter_count, passed_flags=None):
+    def __init__(self, name, help_string, available_flags, parameter_error_msg, parameter_count, parameter_types,
+                 passed_flags=None):
         self.name = name
         self.help = help_string
         self.passed_flags = passed_flags if passed_flags is not None else list()
         self.available_flags = available_flags
         self.parameter_error_msg = parameter_error_msg
         self.parameter_count = parameter_count
+        self.parameter_types = parameter_types
 
+    # TODO fix this so that each run method gets the valid parameters and flags passed
     @abstractmethod
     def run(self, flags):
         pass
@@ -60,11 +63,11 @@ Flags-----------------------¬
 6. Help -> --h
     View this text.
                          """, ["--a", "--r", "--s", "--g", "--v", "--h"],
-                         "This command requires one argument: the path to target directory. "
-                         "Use 'seize help' for assistance.", 1)
+                         "This command requires one argument: the path to target directory. " + Messages.HELP, 1,
+                         ["dir"])
 
     def check_directory_validity(self, input_directory):
-        # TODO make sure the provided directory exists
+        # TODO make sure the provided directory exists before launching into command
         pass
 
     def run(self, flags):
@@ -77,7 +80,7 @@ class Transfer(Command):
     def __init__(self):
         super().__init__(CommandStrings.TRANSFER, "Transfer help", ["--g", "--v", "--h"],
                          "This command requires two arguments: the path of the file to be moved and the path of the "
-                         "directory to move the file to. Use 'seize help' for assistance.", 2)
+                         "directory to move the file to. " + Messages.HELP, 2, ["file", "dir"])
 
     def run(self, flags):
         print("TRANSFER COMMAND")
@@ -86,17 +89,17 @@ class Transfer(Command):
 class Title(Command):
 
     def __init__(self):
-        super().__init__(CommandStrings.TITLE, str(), list(), str(), 0)
+        super().__init__(CommandStrings.TITLE, str(), list(), str(), 0, list())
 
     def run(self, flags):
         print(Aesthetics.LOGO + "\nWelcome to the ultimate file migration tool. \nTime for you to seize the "
-                                "power of Seize. Use 'seize help' for assistance.")
+                                "power of Seize. " + Messages.HELP)
 
 
 class Null(Command):
 
     def __init__(self):
-        super().__init__(str(), str(), list(), str(), 0)
+        super().__init__(str(), str(), list(), str(), 0, list())
 
     def run(self, flags):
         pass
@@ -107,7 +110,7 @@ class Shift(Command):
     def __init__(self):
         super().__init__(CommandStrings.SHIFT, "Shift help", ["--a", "--r", "--s", "--g", "--v", "--h"],
                          "This command requires two arguments: the path of the directory to be moved and the path of "
-                         "the directory to move the directory to. Use 'seize help' for assistance.", 2)
+                         "the directory to move the directory to. " + Messages.HELP, 2, ["dir", "dir"])
 
     def run(self, flags):
         print("SHIFT COMMAND")
@@ -117,7 +120,7 @@ class Help(Command):
 
     def __init__(self):
         super().__init__(CommandStrings.SHIFT, "Help", list(),
-                         "This command requires zero arguments. Use 'seize help' for assistance.", 0)
+                         "This command requires zero arguments. " + Messages.HELP, 0, list())
 
     def run(self, flags):
         self.passed_flags = flags
