@@ -6,6 +6,37 @@ class Command(ABC):
 
     def __init__(self, name, help_string, available_flags, parameter_error_msg, parameter_count, parameter_types,
                  passed_flags=None, passed_parameters=None):
+        """
+        Base for all commands. Saves everything required for each command to function properly, and also everything
+        required in the command from the user in order for the function to be valid and hence run.
+
+        :param name: the name of the command passed.
+        :type: str
+
+        :param help_string: the text that will be displayed to assist the user when the --h flag is passed.
+        :type: str
+
+        :param available_flags: the flags that are viable for use with this specific command.
+        :type: list
+
+        :param parameter_error_msg: the text that will be displayed to the user when there is a fault among the
+        parameters that they passed.
+        :type: str
+
+        :param parameter_count: the number of required parameters for the command.
+        :type: int
+
+        :param parameter_types: the type of each parameter- not conventional types however. The types expected in this
+        parameter are either "file" or "dir". These indicate whether or not the parameter must be a path to a file or a
+        path to a directory.
+        :type: list
+
+        :param passed_flags: the flags that were passed by the user.
+        :type: list
+
+        :param passed_parameters: the parameters that were passed by the user.
+        :type: list
+        """
         self.name = name
         self.help = help_string
         self.passed_flags = passed_flags if passed_flags is not None else list()
@@ -25,6 +56,14 @@ class Command(ABC):
         """
         self.passed_parameters = args[0]
         self.passed_flags = args[1]
+
+    @abstractmethod
+    def preparation(self):
+        pass
+
+    @abstractmethod
+    def cleanup(self):
+        pass
 
     def __str__(self):
         return self.name
@@ -46,6 +85,12 @@ class This(Command):
         print(f"Params: {self.passed_parameters}")
         print(f"Flags: {self.passed_flags}")
 
+    def preparation(self):
+        pass
+
+    def cleanup(self):
+        pass
+
 
 class Transfer(Command):
 
@@ -55,7 +100,14 @@ class Transfer(Command):
                          "directory to move the file to. " + Messages.SHORT_HELP, 2, ["file", "dir"])
 
     def run(self, *args):
+        super().run(*args)
         print("TRANSFER COMMAND")
+
+    def preparation(self):
+        pass
+
+    def cleanup(self):
+        pass
 
 
 class Shift(Command):
@@ -66,21 +118,36 @@ class Shift(Command):
                          "the directory to move the directory to. " + Messages.SHORT_HELP, 2, ["dir", "dir"])
 
     def run(self, *args):
+        super().run(*args)
         print("SHIFT COMMAND")
 
+    def preparation(self):
+        pass
 
-class Help(Command):
+    def cleanup(self):
+        pass
+
+
+class SimpleCommand(Command, ABC):
+
+    def preparation(self):
+        pass
+
+    def cleanup(self):
+        pass
+
+
+class Help(SimpleCommand):
 
     def __init__(self):
-        super().__init__(CommandStrings.SHIFT, "Help", list(), "This command requires zero arguments. " +
+        super().__init__(CommandStrings.HELP, "Help", list(), "This command requires zero arguments. " +
                          Messages.SHORT_HELP, 0, list())
 
     def run(self, *args):
-
         print(Messages.LONG_HELP)
 
 
-class Title(Command):
+class Title(SimpleCommand):
 
     def __init__(self):
         super().__init__(CommandStrings.TITLE, str(), list(), str(), 0, list())
@@ -90,7 +157,7 @@ class Title(Command):
                                 "power of Seize. " + Messages.SHORT_HELP)
 
 
-class Null(Command):
+class Null(SimpleCommand):
 
     def __init__(self):
         super().__init__(str(), str(), list(), str(), 0, list())
