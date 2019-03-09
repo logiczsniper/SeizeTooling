@@ -66,10 +66,6 @@ Flags-----------------------¬
                          "This command requires one argument: the path to target directory. " + Messages.HELP, 1,
                          ["dir"])
 
-    def check_directory_validity(self, input_directory):
-        # TODO make sure the provided directory exists before launching into command
-        pass
-
     def run(self, flags):
         self.passed_flags = flags
         print("This command")

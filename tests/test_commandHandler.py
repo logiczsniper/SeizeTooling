@@ -14,6 +14,8 @@ class TestCommandHandler(TestCase):
     def setUp(self):
         self.results = list()
         self.input_set = dict()
+        self.test_dir = "SeizeTool\\tests\\test_directory"
+        self.test_file = "SeizeTool\\tests\\test_file.txt"
 
     def test_title(self):
         self.input_set = {"Pass any parameter": [str(), "param"],
@@ -21,24 +23,29 @@ class TestCommandHandler(TestCase):
 
     def test_this(self):
         self.input_set = {"Pass no parameters": [str(), "this"],
-                          "Pass too many parameters": [str(), "this", "param1", "param2"],
+                          "Pass too many parameters": [str(), "this", self.test_dir, self.test_dir],
                           "Pass a valid flag - no parameter": [str(), "this", "--a"],
-                          "Pass an invalid flag": [str(), "param", "--q"],
-                          "Pass in invalid order": [str(), "this", "--a", "param"]}
+                          "Pass an invalid flag": [str(), "this", self.test_dir, "--q"],
+                          "Pass in invalid order": [str(), "this", "--a", self.test_dir],
+                          "Pass a invalid parameter": [str(), "this", "param"]}
 
     def test_transfer(self):
         self.input_set = {"Pass no parameters": [str(), "transfer"],
-                          "Pass too many parameters": [str(), "transfer", "param1", "param2", "param3"],
+                          "Pass too many parameters": [str(), "transfer", self.test_file, self.test_dir, self.test_dir],
+                          "Pass too little parameters": [str(), "transfer", self.test_file],
                           "Pass a valid flag - no parameter": [str(), "transfer", "--g"],
-                          "Pass an invalid flag": [str(), "param", "param2", "--q"],
-                          "Pass in invalid order": [str(), "transfer", "--g", "param1", "param2"]}
+                          "Pass an invalid flag": [str(), "transfer", self.test_file, self.test_dir, "--q"],
+                          "Pass in invalid order": [str(), "transfer", "--g", self.test_file, self.test_dir],
+                          "Pass a invalid parameter": [str(), "transfer", self.test_file, "param"]}
 
     def test_shift(self):
         self.input_set = {"Pass no parameters": [str(), "shift"],
-                          "Pass too many parameters": [str(), "shift", "param1", "param2", "param3"],
+                          "Pass too many parameters": [str(), "shift", self.test_dir, self.test_dir, self.test_dir],
+                          "Pass too little parameters": [str(), "shift", self.test_dir],
                           "Pass a valid flag - no parameter": [str(), "shift", "--a"],
-                          "Pass an invalid flag": [str(), "param", "param2", "--q"],
-                          "Pass in invalid order": [str(), "shift", "--a", "param1", "param2"]}
+                          "Pass an invalid flag": [str(), "shift", self.test_dir, self.test_dir, "--q"],
+                          "Pass in invalid order": [str(), "shift", "--a", self.test_dir, self.test_dir],
+                          "Pass a invalid parameter": [str(), "shift", self.test_dir, "param"]}
 
     def test_null(self):
         self.input_set = {"Pass a invalid command": [str(), "invalid_command"]}
