@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.command_handler import CommandHandler
+from src.command_checker import CommandChecker
 
 
 class TestCommandHandler(TestCase):
@@ -57,7 +57,7 @@ class TestCommandHandler(TestCase):
     def tearDown(self):
 
         for command in self.input_set.values():
-            self.command_handler = CommandHandler(command)
+            self.command_handler = CommandChecker(command)
             self.results.append(self.command_handler.is_valid)
 
         if True in self.results:
