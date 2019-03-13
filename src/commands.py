@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABC
 from src.constants import CommandStrings, Aesthetics, Messages
+from time import time
 
 
 class Command(ABC):
@@ -46,6 +47,10 @@ class Command(ABC):
         self.parameter_count = parameter_count
         self.parameter_types = parameter_types
 
+        # Preparation variables saved.
+        self.starting_time = None
+        self.file_references = None
+
     @abstractmethod
     def run(self, *args):
         """
@@ -59,17 +64,44 @@ class Command(ABC):
 
     @abstractmethod
     def preparation(self):
-        pass
+
+        # Save the starting time.
+        self.starting_time = time()
+
+        # If the --s flag was passed, save the current setup. TODO
+        if "--s" in self.passed_flags:
+            pass
+
+        # Save file path references data. TODO
+        self.file_references = {"": []}
 
     @abstractmethod
     def cleanup(self):
-        pass
+
+        # If the --v flag was passed, all details must be given back to the user. TODO
+        if "--v" in self.passed_flags:
+            pass
+        else:
+            pass
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return self.name
+
+
+class SimpleCommand(Command, ABC):
+    """
+    Not all commands need to complete a serious task- Help, Title and Null. Those commands inherit from this
+    so that they do not need to bother overriding preparation and cleanup methods.
+    """
+
+    def preparation(self):
+        pass
+
+    def cleanup(self):
+        pass
 
 
 class This(Command):
@@ -120,15 +152,6 @@ class Shift(Command):
     def run(self, *args):
         super().run(*args)
         print("SHIFT COMMAND")
-
-    def preparation(self):
-        pass
-
-    def cleanup(self):
-        pass
-
-
-class SimpleCommand(Command, ABC):
 
     def preparation(self):
         pass
