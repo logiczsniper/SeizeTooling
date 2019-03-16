@@ -1,5 +1,6 @@
 from fnmatch import fnmatch
 import os
+import shutil
 
 
 class FileManager:
@@ -34,6 +35,26 @@ class FileManager:
             return True
         except FileExistsError:
             return False
+
+    @staticmethod
+    def delete_file(file):
+        os.remove(file)
+
+    @staticmethod
+    def delete_dir(directory):
+        shutil.rmtree(directory, ignore_errors=True)
+
+    @staticmethod
+    def copy_file(source, destination):
+        shutil.copy2(source, destination)
+
+    @staticmethod
+    def copy_dir(source, destination):
+        shutil.copytree(source, destination)
+
+    @staticmethod
+    def move_object(source, destination):
+        shutil.move(source, destination)
 
     def get_files(self, directory):
         return [entry for entry in self.get_items(directory) if entry.is_file()]
