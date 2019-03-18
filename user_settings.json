@@ -1,0 +1,9 @@
+{
+  "gitPath": "",
+  "defaultFlags": {
+    "this": ["--a", "--s"],
+    "shift": ["--a", "--s"],
+    "transfer": []
+  },
+  "defaultTargetDir": "."
+}
