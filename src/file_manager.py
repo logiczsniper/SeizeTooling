@@ -3,27 +3,27 @@ from os import makedirs, scandir, mkdir, remove
 from subprocess import call
 from shutil import move, copytree, rmtree, copy2
 from json import load
-from typing import Iterable
+from typing import Iterable, List
 
 
 class FileManager:
 
     @staticmethod
-    def write_data(file, data):
+    def write_data(file: str, data):
         with open(file, "w") as file:
             file.write(data)
 
     @staticmethod
-    def read_data(file) -> str:
+    def read_data(file: str) -> str:
         with open(file, "r") as file:
             return file.read()
 
     @staticmethod
-    def get_items(directory) -> Iterable:
+    def get_items(directory: str) -> Iterable:
         return list(scandir(directory))
 
     @staticmethod
-    def create_dir(path):
+    def create_dir(path: str) -> bool:
         try:
             mkdir(path)
             return True
@@ -31,7 +31,7 @@ class FileManager:
             return False
 
     @staticmethod
-    def create_dirs(path):
+    def create_dirs(path: str) -> bool:
         try:
             makedirs(path)
             return True
@@ -39,32 +39,32 @@ class FileManager:
             return False
 
     @staticmethod
-    def create_file(path):
+    def create_file(path: str) -> None:
         with open(path, "w+"):
             pass
 
     @staticmethod
-    def delete_file(file):
+    def delete_file(file: str):
         remove(file)
 
     @staticmethod
-    def delete_dir(directory):
+    def delete_dir(directory: str):
         rmtree(directory, ignore_errors=True)
 
     @staticmethod
-    def copy_file(source, destination):
+    def copy_file(source: str, destination: str):
         copy2(source, destination)
 
     @staticmethod
-    def copy_dir(source, destination):
+    def copy_dir(source: str, destination: str):
         copytree(source, destination)
 
     @staticmethod
-    def move_object(source, destination):
+    def move_object(source: str, destination: str):
         move(source, destination)
 
     @staticmethod
-    def refactor_python_file(source, old_path, new_path):
+    def refactor_python_file(source: str, old_path: str, new_path: str) -> None:
 
         with open(source, "r") as file:
             lines = file.readlines()
@@ -82,7 +82,7 @@ class FileManager:
     def git():
 
         with open("user_settings.json") as json_file:
-            gitPath = load(json_file).get("gitPath")
+            gitPath: str = load(json_file).get("gitPath")
 
         # List to set directory and working tree
         dirList = ["--git-dir=./.git", "--work-tree=."]
@@ -99,12 +99,12 @@ class FileManager:
     def get_sub_dirs(self, directory):
         return [entry for entry in self.get_items(directory) if entry.is_dir()]
 
-    def get_python_files(self, directory, recursive=False):
+    def get_python_files(self, directory, recursive: bool = False) -> List:
         # TODO if no recursive functionality is required, simplify the method
 
-        output = list()
-
         if recursive:
+            output = list()
+
             for item in self.get_items(directory):
 
                 if item.is_dir():

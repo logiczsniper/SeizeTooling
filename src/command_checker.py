@@ -1,6 +1,7 @@
+from os import path
+
 from src.commands import This, Shift, Transfer, Help, Title, Null
 from src.constants import CommandStrings, Messages
-from os import path
 
 
 class CommandChecker:
@@ -33,7 +34,7 @@ class CommandChecker:
             self.is_valid = False
 
     @staticmethod
-    def create_command(command_string):
+    def create_command(command_string: str):
         if command_string == CommandStrings.TITLE:
             command = Title()
         elif command_string == CommandStrings.THIS:
@@ -50,7 +51,7 @@ class CommandChecker:
         return command
 
     @property
-    def seize_script_path(self):
+    def seize_script_path(self) -> str:
 
         if self.is_valid:
             return self.all_input[0]
@@ -61,7 +62,7 @@ class CommandChecker:
         if self.is_valid:
             return self.all_input[2::]
 
-    def check_command(self):
+    def check_command(self) -> bool:
 
         # If a command was given but it is not one of the available commands, take action.
         if isinstance(self.command, Null):
@@ -70,7 +71,7 @@ class CommandChecker:
 
         return True
 
-    def check_parameters(self):
+    def check_parameters(self) -> bool:
 
         # Parameters are only required if there is no --h flag
         if "--h" not in self.all_flags:
@@ -99,7 +100,7 @@ class CommandChecker:
 
         return True
 
-    def check_flags(self):
+    def check_flags(self) -> bool:
 
         # If invalid flags were present in the input, take action.
         if self.invalid_flags != list():
@@ -113,7 +114,7 @@ class CommandChecker:
 
         return True
 
-    def check_order(self):
+    def check_order(self) -> bool:
 
         # Assuming the command comes first, check that what follows is the parameter(s) then the flag(s).
         flag_found = False

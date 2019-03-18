@@ -1,12 +1,14 @@
 from abc import abstractmethod, ABC
+from typing import List
+
 from src.constants import CommandStrings, Aesthetics, Messages
 from time import time
 
 
 class Command(ABC):
 
-    def __init__(self, name, help_string, available_flags, parameter_error_msg, parameter_count, parameter_types,
-                 passed_flags=None, passed_parameters=None):
+    def __init__(self, name: str, help_string: str, available_flags, parameter_error_msg: str, parameter_count: int,
+                 parameter_types, passed_flags=None, passed_parameters=None):
         """
         Base for all commands. Saves everything required for each command to function properly, and also everything
         required in the command from the user in order for the function to be valid and hence run.
@@ -59,8 +61,8 @@ class Command(ABC):
         :param args: must be [[parameters passed], [flags passed]].
         :type: list
         """
-        self.passed_parameters = args[0]
-        self.passed_flags = args[1]
+        self.passed_parameters: List = args[0]
+        self.passed_flags: List = args[1]
 
     @abstractmethod
     def preparation(self):
