@@ -92,12 +92,10 @@ class Command(ABC):
 
                         if str(entry.path.encode("utf-8", "backslashreplace"))[2:] in line.replace('"', "'"):
                             line = line.replace("\\\\", "\\")
-                            if self.file_references.get(script) is not None:
-                                self.file_references.get(script).append(line)
+                            if self.file_references.get(script.path) is not None:
+                                self.file_references.get(script.path).append(line)
                             else:
-                                self.file_references[script] = [line]
-
-        print(self.file_references)
+                                self.file_references[script.path] = [line]
 
     @abstractmethod
     def cleanup(self):
