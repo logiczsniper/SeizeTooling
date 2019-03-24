@@ -1,8 +1,9 @@
 from abc import abstractmethod, ABC
-from typing import List
+from time import time
+from typing import List, Dict
 
 from src.constants import CommandStrings, Aesthetics, Messages
-from time import time
+from src.file_manager import FileManager
 
 
 class Command(ABC):
@@ -50,8 +51,9 @@ class Command(ABC):
         self.parameter_types = parameter_types
 
         # Preparation variables saved.
-        self.starting_time = None
+        self.starting_time, self.finished_time = int(), int()
         self.file_references = None
+        self.file_manager = FileManager()
 
     @abstractmethod
     def run(self, *args):
@@ -70,15 +72,38 @@ class Command(ABC):
         # Save the starting time.
         self.starting_time = time()
 
-        # If the --s flag was passed, save the current setup. TODO
+        # If the --s flag was passed, save the current setup.
         if "--s" in self.passed_flags:
-            pass
+            backup_dir_path = self.passed_parameters[0] + "/seize_backup"
+            self.file_manager.copy_dir(self.passed_parameters[0], backup_dir_path)
 
-        # Save file path references data. TODO
-        self.file_references = {"": []}
+        # Save file path references data.
+        self.file_references: Dict[str, List[str]] = dict()
+        all_files = self.file_manager.get_files(self.passed_parameters[0], recursive=True)
+
+        scripts = self.file_manager.get_python_files(self.passed_parameters[0])
+        for script in scripts:
+
+            with open(script, "r") as file:
+
+                for line in file.readlines():
+
+                    for entry in all_files:
+
+                        if str(entry.path.encode("utf-8", "backslashreplace"))[2:] in line.replace('"', "'"):
+                            line = line.replace("\\\\", "\\")
+                            if self.file_references.get(script) is not None:
+                                self.file_references.get(script).append(line)
+                            else:
+                                self.file_references[script] = [line]
+
+        print(self.file_references)
 
     @abstractmethod
     def cleanup(self):
+
+        # Save the finished time.
+        self.finished_time = time()
 
         # If the --v flag was passed, all details must be given back to the user. TODO
         if "--v" in self.passed_flags:
@@ -115,6 +140,7 @@ class This(Command):
 
     def run(self, *args):
         super().run(*args)
+        super().preparation()
 
         print(f"Params: {self.passed_parameters}")
         print(f"Flags: {self.passed_flags}")

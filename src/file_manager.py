@@ -93,8 +93,21 @@ class FileManager:
         # Commits the change with the message
         call([gitPath] + dirList + ["commit", "--message", "Seize file organisation complete!"])
 
-    def get_files(self, directory):
-        return [entry for entry in self.get_items(directory) if entry.is_file()]
+    def get_files(self, directory, recursive: bool = False):
+        if recursive:
+            output = list()
+
+            for item in self.get_items(directory):
+
+                if item.is_dir():
+                    embedded_files = self.get_files(item)
+                    output.extend(embedded_files)
+                elif item.is_file():
+                    output.append(item)
+        else:
+            output = [entry for entry in self.get_items(directory) if entry.is_file()]
+
+        return output
 
     def get_sub_dirs(self, directory):
         return [entry for entry in self.get_items(directory) if entry.is_dir()]
@@ -113,7 +126,7 @@ class FileManager:
                 elif item.endswith(".py"):
                     output.append(item)
         else:
-            output = [entry for entry in self.get_items(directory) if entry.endswith(".py")]
+            output = [entry for entry in self.get_items(directory) if fnmatch(entry, "*.py")]
 
         return output
 

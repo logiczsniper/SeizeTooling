@@ -1,5 +1,5 @@
 from threading import Thread
-from commands import Command
+from src.commands import Command
 from typing import List
 
 

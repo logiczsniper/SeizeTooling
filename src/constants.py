@@ -27,15 +27,15 @@ Usage-----------------------¬
 Commands--------------------¬
 
 1. this
-    The base seize command to complete the main functionality of seize. Organises files, refractors scripts and more 
+    The base seize command to complete the main functionality of seize. Organises files, refactor scripts and more 
     depending on the flags used. Use: 'seize this --h' for more help details and flags available.
     
 2. shift
-    Only move a single directory from one path to another, refractors the scripts. Use: 'seize shift --h' for more help 
+    Only move a single directory from one path to another, refactor the scripts. Use: 'seize shift --h' for more help 
     details and flags available.
     
 3. transfer 
-    Only move a single file from one directory to another, refractors the scripts. Use 'seize transfer --h' for more 
+    Only move a single file from one directory to another, refactor the scripts. Use 'seize transfer --h' for more 
     help details and flags available.
 
 More------------------------¬
